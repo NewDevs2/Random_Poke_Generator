@@ -7,40 +7,21 @@
   <title>Document</title>
 </head>
 <body>
-
   <div id="root"></div>
   <script>
     const root = document.getElementById('root');
-    // 우선 document를 root로 식별하는 것까진 확인.
-    const xhr = new XMLHttpRequest();
-    let random = Math.floor(Math.random() * 1010);
-    const _URL = 'https://pokeapi.co/api/v2/pokemon/'+random;
-    //링크를 불러올 때마다 뒤에 붙여질 도감 번호를 랜덤으로 설정
-    xhr.open('GET', _URL);
-    // 접속할 URL을 어떻게 열지 정하고 (GET, POST) 입력하기 위해 미리 선언한 변수 (_URL)입력
-    xhr.send();
-    // 서버에 요청을 전송함
     
-    // console.log(xhr.response);
-    // // xht 함수의 responce 값을 콘솔에 출력
+    const xhr = new XMLHttpRequest();
+    const _URL = 'https://pokeapi.co/api/v2/pokemon/ditto';
+    xhr.open('GET', _URL);
+    xhr.send();
     xhr.addEventListener('load', function() {
+      console.log(xhr.response);
       const _PokeData = JSON.parse(xhr.response);
-      // response 값을 javascript 값으로 변환
-      const _PokeNumber = _PokeData.name;
-      // _URL에서 불러온 객체의 name 값을 변수로 선언
-      const _PokePhoto = _PokeData.sprites;
-      // 마찬가지로 _URL에서 불러온 객체의 sptites(포켓몬 초상화) 값을 변수로 선언 
       const h1 = document.createElement('h1');
-      h1.textContent = _PokeNumber;
+      h1.textContent = _PokeData.name;
       root.appendChild(h1);
-      // 포켓몬 이름 출력
-      const h2 = document.createElement('img');
-      h2.setAttribute("src", _PokePhoto.front_default);
-      root.appendChild(h2);
-      // 포켓몬 초상화 출력
     });
-
-    //JSON으로 서버를 어떻게 가동할까? => 이러저러해서 json 설치하고 뭔가 했는데 서버 가동은 안됨
   </script>
 </body>
 </html>
