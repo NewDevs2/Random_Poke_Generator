@@ -17,9 +17,9 @@
     xhr.send();
     xhr.addEventListener('load', function() {
       const _PokeData = JSON.parse(xhr.response);
-      let random = Math.floor(Math.random() * _PokeData.count);
-      return _PokeData.results[random].url;
+      return _PokeData;
     })
+    
     
     
   </script>
