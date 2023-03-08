@@ -5,13 +5,47 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>랜덤 포켓몬</title>
+  <style>
+    @font-face {
+    font-family: 'NeoDunggeunmoPro-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+    * {
+      font-family: 'NeoDunggeunmoPro-Regular';
+    }
+
+    #root {
+      display: flex;
+    }
+  </style>
 </head>
 <body>
 
   <div id="root"></div>
   <script>
+
+
+    
     const root = document.getElementById('root');
     // root 식별
+
+    const creatDiv = document.createElement('div');
+    creatDiv.setAttribute("class", "items");
+    root.appendChild(creatDiv);
+
+    const createBtn = document.createElement('button');
+    createBtn.setAttribute("class", "random_button");
+    createBtn.textContent="뽑기";
+    root.appendChild(createBtn);
+
+
+
+    const ohDoctor = document.createElement('img');
+    ohDoctor.setAttribute("src", "https://i.namu.wiki/i/z9PdYANrjSX71l0tk_Og7o_Qvhfkd9durUP0dSZqN19RePCZmBMwBCp_kHza1QZ9WowH404vPtau6RbbPFYNGA.png");
+    creatDiv.appendChild(ohDoctor);
+
     const xhr = new XMLHttpRequest();
     // 문서가 서버에 데이터 요청 시작
 
@@ -31,32 +65,18 @@
     
     xhr.addEventListener('load', function() { // xhr 변수가 'load' 됐을 때, 함수 시작
       const _PokeData = JSON.parse(xhr.response);
-      // JSON은 자바스크립트의 객체 방식을 데이터로 표현한 것.
-      // 자바스크립트처럼 보이지만 진짜 자바스크립트는 아니기 때문에 해석 작업이 필요함. 그것에 필요한 명령어가 JSON.parse
-
-      console.log(_PokeData);
-      // JSON이 잘 변한됐는지 확인
-
-
-      // const _PokeInfo = _PokeData.species.url;
-      // console.log(_PokeInfo);
-      // 정보가 정상적으로 불러와졌는지 확인하기 위해 변수 선언 후 console.log로 확인
-      // 이후 추가적으로 가져올 정보들 어떤 것이 있는지 확인
-
 
       const _PokePhoto = _PokeData.sprites;
       // 변수 _PokeDate의 sptites(포켓몬 초상화) 위치를 찾은 뒤 식별해줌 
 
-
       const h2 = document.createElement('img');
       h2.setAttribute("src", _PokePhoto.front_default);
-      root.appendChild(h2);
+      creatDiv.appendChild(h2);
+      h2.style.display="none";
       // 포켓몬 초상화 출력.
 
 
       // 한글 포켓몬 이름 가져오기 위해 한번 더 불러온다.
-
-
       const xhr2 = new XMLHttpRequest();
       xhr2.open('GET', _PokeData.species.url);
       // 이번엔 맨 처음 선언한 _PokeData의 .species.url의 정보를 가져오려고 함
@@ -72,17 +92,23 @@
       const _PokeKoreaName = _PokeKoreaData.names[2];
       // 한국어 이름 식별
 
-
-      console.log(_PokeKoreaName);
-      // 한국어 출력되는지 확인
-
-
       const h1 = document.createElement('h1');
       h1.textContent = _PokeKoreaName.name;
-      root.appendChild(h1);
+      creatDiv.appendChild(h1);
+      h1.style.display="none";
       // 포켓몬 한글 이름 출력..
+
+      createBtn.addEventListener("click", function() {
+      createBtn.textContent="다시 뽑기";
+      h1.style.display="inline-block";
+      h2.style.display="inline-block";
+      if (createBtn.textContent === "다시 뽑기");
+    })
+
       })
     });
+
+
 
   </script>
 </body>
