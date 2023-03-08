@@ -34,16 +34,18 @@
   <div id="root">
     <div id="imgBox"></div>
     <div id="nameBox"></div>
-    <button onclick="">포켓몬 뽑기</button>
+    <button onclick="printPoke()">포켓몬 뽑기</button>
   </div>
 
   <script>
-    
-
+    // html 문서 내의 데이터 가져오기
+    const root = document.getElementById('root');
+    const imgBox = document.getElementById('imgBox');
+    const nameBox = document.getElementById('nameBox');
     // 포켓몬 api를 가져오기 위한 데이터 요청
     
     // 요청을 만들기 위해 new 키워드를 사용, XMLHttpRequest생성자로 부터 새로운 request 인스턴스를 생성해야 함
-    const xhr = new XMLHttpRequest;
+    const xhr = new XMLHttpRequest();
     // 포케api의 모든 포켓몬 url
     const allPokeUrl = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
     
@@ -70,10 +72,26 @@
     })
  console.log(allPokeInfo)
     
- function randomPick() {
-  let randomPick = math.floor(math.random() * 1281)
-  const pokePick = allPokeInfo.results[randomPick]
-  console.log(pokePick)
+ function printPoke() {
+  // 위에서 parse하더라도 함수에서 별도의 사용을 선언하지 않으면 데이터가 휘발되는 듯
+    // const eachPokeInfo = allPokeInfo.results[0].url;
+  // 현재 얻은 api로는 여기까지만 가능 이 url안의 api 데이터를 얻기 위해 다시 접근 요청
+  const xhr2 = new XMLHttpRequest();
+  // url 접근 확인
+  // console.log(allPokeUrl);
+  const eachPokeInfoUrl = 'https://pokeapi.co/api/v2/pokemon/1/'
+  xhr2.open('GET',eachPokeInfoUrl)
+  xhr2.send();
+  xhr2.addEventListener('load', function() {
+    const eachPokeInfo = JSON.parse(xhr2.response);
+    // console.log(eachPokeInfo);
+    return eachPokeInfo;
+  })
+    // console.log(eachPokeInfo)
+    let div = document.createElement('div');
+    div.textContent = "하";
+    imgBox.appendChild(div);
+    
  }
       // 기능을 넣을 url이 담긴 json파일을 넣어주고 밑에서 함수 정의
     //   sss(allPokeInfo)
