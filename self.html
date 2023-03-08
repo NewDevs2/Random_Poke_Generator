@@ -57,6 +57,7 @@
     function randomSelect () {
       let random = Math.floor(Math.random() * 1010);
       const randomPick = pokeName.results[random];
+      const xhr = new XMLHttpRequest();
       xhr.open('GET', randomPick.url);
       xhr.send();
       xhr.addEventListener('load', function() {
