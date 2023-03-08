@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @font-face {
+    font-family: 'NeoDunggeunmoPro-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+    * {
+      font-family: 'NeoDunggeunmoPro-Regular';
+    }
+
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const root = document.getElementById('root');
+    // div id = root 식별
+
+    root.style.cssText="display : flex;justify-content : center; align-items : center; flex-direction : column;width : 100vw; height : 100vh;";
+    // root에 style cssText로 일괄적용
+
+    const xhr = new XMLHttpRequest();
+    //통신 시작
+
+    const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=1010&offset=0'
+    // 가져올 링크 변수로 선언
+
+    let createPokemonPicture;
+    let createPokemonName;
+    // 버튼 누르면 다시 갱신할 거 대비하여 '지역변수'로 포켓몬 초상화, 이름 미리 선언
+
+    document.body.onload = function() {
+      createPokemonPicture = document.createElement('img');
+      createPokemonName = document.createElement('h1');
+    }
+    // 문서가 로드될 때(onload) 실행되는 함수. 위와 같은 경우는 문서가 로드되면 document에 img 태그와 h1 태그 생성
+
+    for (let i = 0; i < 4; i++) {
+      const creatDiv = document.createElement('div');
+      creatDiv.setAttribute("class", "items");
+      root.appendChild(creatDiv);
+    }
+    // 반복문으로 class가 items인 div 생성
+    
+
+    const createBtn = document.createElement('button');
+    createBtn.textContent = "뽑기";
+    createBtn.setAttribute("class", "create-button");
+    root.children[3].appendChild(createBtn);
+    createBtn.style.cssText = "width:200px; height:100px; font-size:32px;"
+    // 반복문으로 생성한 div 안에 버튼 생성 후 스타일링 요소 추가
+    
+    
+    
+    const ohDoctor = document.createElement('img');
+    ohDoctor.setAttribute("src", "https://i.namu.wiki/i/z9PdYANrjSX71l0tk_Og7o_Qvhfkd9durUP0dSZqN19RePCZmBMwBCp_kHza1QZ9WowH404vPtau6RbbPFYNGA.png");
+    root.children[0].appendChild(ohDoctor);
+    ohDoctor.style.cssText="width:100px; height:100px;"
+    // 반복문으로 생성한 div 안에 img 요소 생성 후 오박사님 추가
+    
+    
+    let pokeName;
+    // 사이트에서 불러올 정보들 미리 지역변수로 선언
+
+    xhr.open('GET', _URL);
+    // 링크를 가져오기 위해 위에서 미리 선언한 변수 이용함
+
+    xhr.send();
+    // 정보 요청
+
+    xhr.addEventListener('load', function() {
+      pokeName = JSON.parse(xhr.response);
+      return pokeName;
+    })
+    // 정보가 불러와졌을 때, JSON을 자바스크립트 형식으로 parsing한 뒤 return함.
+
+
+
+    // 이후 랜덤 생성 만들기 위해 randomselect라는 함수 선언
+
+    function randomSelect () {
+      let random = Math.floor(Math.random() * 1010);
+      // 버튼을 누를 때마다 숫자를 뽑아와야 하기 때문에 함수 안에 지역변수로 선언
+      const randomPick = pokeName.results[random];
+      // 가져온 정보의 결과(여기서는 포켓몬 리스트)를 무작위로 선정
+      const xhr = new XMLHttpRequest();
+      // 무작위로 선정된 포켓몬의 정보를 가져오기 위해 다시 통신 시작
+      xhr.open('GET', randomPick.url);
+      // 여기서는 이름을 가져오기 위해 이름 정보가 담긴 주소를 입력
+      xhr.send();
+      // 정보 요청
+
+
+      xhr.addEventListener('load', function() {
+        const pokemonInfo = JSON.parse(xhr.response);
+        // 다시, 정보가 도착하면 실행되는 함수 생성 (함수 안에 함수)
+        // 도착한 정보를 자바스크립트 형식으로 parsing함
+        
+        const pokemonPicture = pokemonInfo.sprites.front_default;
+        // 가져온 정보를 탐색해서 포켓몬 초상화 찾아낸 뒤 변수로 선언
+
+        createPokemonPicture.setAttribute("src", pokemonPicture);
+        // 위 변수를 맨 처음 onload된 img 태그 안의 속성 값으로 잡아줌
+
+        root.children[1].appendChild(createPokemonPicture);
+        // root의 첫번째 자식에 들어가도록 함
+
+        xhr.open('GET', pokemonInfo.species.url);
+        // 포켓몬 초상화를 가져왔으니, 이제 한글 이름을 가져오기 위해 다시 한번 통신 시작
+        // 여기서는 포켓몬 이름이 담긴 주소를 입력했음
+        xhr.send();
+        // 정보 요청
+
+        xhr.addEventListener('load', function() {
+          const pokemonName = JSON.parse(xhr.response);
+        // 위와 동일하게, 정보가 도착하면 실행되는 함수 생성.
+        // 도착한 정보를 자바스크립트 형식으로 parsing함
+          createPokemonName.innerText = pokemonName.names[2].name;
+          // 포켓몬 초상화와 동일하게, 가져온 정보를 맨 처음 onload된 h1 태그의 innerText값으로 잡아줌
+          root.children[2].appendChild(createPokemonName);
+          // root의 2번째 자식에 들어가도록 함
+        })
+        createBtn.textContent = "다시 뽑기";
+        // 위 모든 함수가 실행되면, 버튼의 이름을 "다시 뽑기"로 바꿈
+      })      
+    }
+    // 함수 동작 종료
+
+
+    createBtn.addEventListener("click", randomSelect);
+    // 버튼 클릭하면 randomselect 함수를 실행하도록 이벤트 리스너 잡아줌
+    
+        </script>
+</body>
+</html>
