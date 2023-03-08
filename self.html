@@ -10,18 +10,50 @@
   <div id="root"></div>
   <script>
     const root = document.getElementById('root');
-    
     const xhr = new XMLHttpRequest();
-    const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
+    const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=1010&offset=0'
+
+    const createBtn = document.createElement('button');
+    createBtn.textContent = "뽑기";
+    createBtn.setAttribute("class", "create-button");
+    document.body.appendChild(createBtn);
+
+    let pokeName;
     xhr.open('GET', _URL);
     xhr.send();
     xhr.addEventListener('load', function() {
-      const _PokeData = JSON.parse(xhr.response);
-      return _PokeData;
+      pokeName = JSON.parse(xhr.response);
+      return pokeName;
     })
     
+    function randomSelect () {
+      let random = Math.floor(Math.random() * 1010);
+      const randomPick = pokeName.results[random];
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', randomPick.url);
+      xhr.send();
+      xhr.addEventListener('load', function() {
+        const pokemonInfo = JSON.parse(xhr.response);
+        
+        const createPokemonPicture = document.createElement('img');
+        console.log(pokemonInfo);
+        const pokemonPicture = pokemonInfo.sprites.front_default;
+        createPokemonPicture.setAttribute("src", pokemonPicture);
+        document.body.appendChild(createPokemonPicture);
+        
+        xhr.open('GET', pokemonInfo.species.url);
+        xhr.send();
+        xhr.addEventListener('load', function() {
+          const pokemonName = JSON.parse(xhr.response);
+          const createPokemonName = document.createElement('p');
+          createPokemonName.textContent = pokemonName.names[2].name;
+          document.body.appendChild(createPokemonName);
+        })
+
+      })
+    }
     
-    
+    createBtn.addEventListener("click", randomSelect);
   </script>
 </body>
 </html>
