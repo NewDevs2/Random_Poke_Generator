@@ -1,14 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<body>
-  
+<style>
 
-  
+</style>
+
+<body>
+  <div id="root"></div>
+  <button>click시 출력</button>
+  <button>click시 저장</button>
+  <button>click시 다시</button>
+
+  <div id="output"></div>
+
+  <script>
+    const root = document.getElementById('root');
+    let testBox;
+    let pokePick = {};
+    let pokePick_sprites = [];
+
+    //다른 함수에도 변수를 가져와 사용 할 수 있게 지역 변수? 느낌으로 선언 하였다.
+
+    const xhr = new XMLHttpRequest();
+    const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
+    xhr.open('GET', _URL);
+    xhr.send();
+
+
+    xhr.addEventListener('load', function () {
+
+      const _PokeData = JSON.parse(xhr.response);
+      // const divCreat = document.createElement('div');
+      testBox = _PokeData.results;
+      console.log(testBox);
+      //포켓몬 배열 찾음 그걸 변수에 넣고 이제 다음 객체를 건드려야 함.
+
+      return testBox; //객체상태
+    });
+
+
+    const btnOut = document.querySelector("body > button:nth-child(2)");
+    const btnIN = document.querySelector("body > button:nth-child(3)");
+    const btnReset = document.querySelector("body > button:nth-child(4)");
+    //버튼 3개를 만들어주어 변수에 담아 두었다.
+
+
+    //버튼이 잘 들어 왔는지 확인
+
+
+
+
+    btnOut.addEventListener("click", function () {
+      let randomPick = Math.floor(Math.random() * 1281);
+      const poketListData = new XMLHttpRequest();
+      const poketListDataUrl = testBox[randomPick].url;
+      // console.log(testBox[randomPick].url);
+      //난수를 돌려 랜덤으로 포켓몬 객체값을 가져옴
+      poketListData.open('GET', poketListDataUrl);
+      poketListData.send();
+
+      poketListData.addEventListener('load', function () {
+        pokePick = JSON.parse(poketListData.response);
+        for (let key in pokePick.sprites) {
+          pokePick_sprites.push(key);
+        }
+
+        console.log(pokePick);
+        //랜덤 포켓몬의 정보 객체에 들어옴
+        console.dir(pokePick.sprites);
+        console.log(pokePick_sprites);
+        for (let i = 0; i < pokePick_sprites.length - 2; i++) {
+          const imgDiv = document.createElement("img");
+          console.log(pokePick_sprites.length - 2);
+
+          if (pokePick.sprites[pokePick_sprites[i]] !== null) {
+            imgDiv.src = pokePick.sprites[pokePick_sprites[i]];
+            root.appendChild(imgDiv);
+           
+          }
+        }
+        pokePick_sprites.length = 0;
+        //배열 값을 초기화 해주었다 초기화를 안 해주면 클릭 했을 떄 마다 값이 계속 들어가서 배열의 크기가 계속 늘어난다.
+      });
+
+    });
+
+
+
+
+
+    // else if(pokePick.sprites[pokePick_sprites[i]] !== typeof(Object)){
+    //   imgDiv.src = pokePick.sprites[pokePick_sprites[i]];
+    //   root.appendChild(imgDiv);
+    // }
+  </script>
 </body>
+
 </html>
