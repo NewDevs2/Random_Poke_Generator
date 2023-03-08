@@ -33,12 +33,15 @@
     display: flex;
     flex-direction: column;
   }
+  #root > div:nth-child(1){
+    border: 1px solid blue;
+  }
 </style>
 
 <body>
   <div id="root">
-    <div>
-    </div>
+    <div></div>
+    <div></div>
   </div>
 
   <script>
@@ -86,7 +89,7 @@
         img.style.cssText = "width:80%; height:60%"
         root.children[0].appendChild(img)
 
-        console.log(_PokeDataImg.species.url);
+        console.log(_PokeDataImg());
 
         const xhr3 = new XMLHttpRequest();
         xhr3.open('GET', _PokeDataImg.species.url);
