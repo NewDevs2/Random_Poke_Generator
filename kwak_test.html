@@ -10,6 +10,23 @@
   <div id="root"></div>
   <button type="button" onclick="randomPick()">click</button>
   <script>
+    
+    // ------------- 0308 수정 -------------------
+    document.body.onload = function() {
+      const root = document.getElementById('root');
+      const PictureHere = document.createElement('img');
+      const NameHere = document.createElement('p');
+      const numHere = document.createElement('p');
+
+      root.appendChild(PictureHere);
+      root.appendChild(NameHere);
+      root.appendChild(numHere);
+    }
+    // -------------------------------------------
+    
+    
+    
+    
     // 변수 xhr에 XHR 초기화 선언
     const xhr = new XMLHttpRequest();
     
@@ -18,13 +35,16 @@
     
     // 모든 포켓몬 리스트 API URL에서 가져온 데이터를 저장하기 위한 변수 선언
     let PokeList;
-
+    // ------------- 0308 수정 -------------------
+    let PokeNum;
+    // -------------------------------------------
+    
     // 모든 포켓몬 리스트 API에 연결
     xhr.open('GET', _URL);
-
+    
     // 모든 포켓몬 리스트에 요청 전송
     xhr.send();
-
+    
     // 전송한 요청이 응답 되었을 때
     xhr.addEventListener('load', function() {
       
@@ -32,20 +52,23 @@
       PokeList = JSON.parse(xhr.response);
       return PokeList
     })
-
+    
     // 버튼 클릭 이벤트
     function randomPick() {
-
+      
       // n번째 포켓몬 랜덤 선택을 위한 랜덤 값 생성
-      let randomPick = Math.floor(Math.random() * 1281)
-
+      let randomPick = Math.floor(Math.random() * 1281);
+      // ------------- 0308 수정 -------------------
+      PokeNum = randomPick;
+      // -------------------------------------------
+      
       // 모든 포켓몬 리스트의 n번째 포켓몬으로 access
-      const pokePick = PokeList.results[randomPick]
+      const pokePick = PokeList.results[randomPick];
       // console.log(pokePick.url);
-
+      
       // 새로운 통신 객체 생성 / 변수에 저장
       const xhr = new XMLHttpRequest();
-
+      
       // n번째 포켓몬의 url에 접속, 요청
       xhr.open('GET', pokePick.url);
       xhr.send()
@@ -64,7 +87,7 @@
           
           // 출력할 포켓몬 이름 변수 선언
           let pokeName;
-
+          
           // 한국어 접속 url 설정, 요청
           const xhr = new XMLHttpRequest();
           xhr.open('GET', koFetch);
@@ -72,22 +95,77 @@
           xhr.addEventListener('load', function () {
             const accessKo = JSON.parse(xhr.response);
             // console.log(accessKo.names[2].name)
-
+            
             // 포켓몬 이미지 생성
-            const test1 = document.createElement('img');
-            test1.setAttribute('src', frontPhoto);
-            document.body.appendChild(test1);
-            pokeName = accessKo.names[2].name
+            // const test1 = document.createElement('img');
+            // ------------- 0308 수정 -------------------
+            const pictureTarget = document.getElementsByTagName('img')[0];
+            pictureTarget.setAttribute('src', frontPhoto);
+            // document.body.appendChild(test1);
             // 포켓몬 이름 생성
-            const test2 = document.createElement('p');
-            test2.innerText = pokeName;
-            document.body.appendChild(test2);
+            const numTarget = document.getElementsByTagName('p')[0];
+            numTarget.innerText = `No.${PokeNum}`;
+            const textTarget = document.getElementsByTagName('p')[1];
+            pokeName = accessKo.names[2].name;
+            // const test2 = document.createElement('p');
+            textTarget.innerText = pokeName;
+            // document.body.appendChild(test2);
+            // -------------------------------------------
           })
         } else { // n번째 포켓몬의 사진이 없을 때
           randomPick() // ★★★★★★★★★★ 재귀함수 (함수를 다시 처음부터 실행하라)
         }
       })
+      // ------------- 0308 수정 -------------------
+      document.getElementsByTagName('button')[0].innerText = "다시 뽑기"
+      if (document.getElementsByTagName('button')[1] === undefined) {
+        const button = document.createElement('button');
+        button.setAttribute('type','button');
+        button.innerText = '저장하기'
+        button.addEventListener('click', saveButtonClick)
+        document.body.appendChild(button);
+      }
     }
+
+    
+    function saveButtonClick() {
+      const inventory = document.getElementById('inventory');
+      
+      if (inventory === null) {
+        const inventory = document.createElement('div')
+        inventory.setAttribute('id','inventory');
+        document.body.appendChild(inventory);
+        
+        goSave();
+      } else {
+        goSave();
+      }
+      
+      function goSave() {
+        const inventory = document.getElementById('inventory')
+        const savePokePicture = root.children[0].attributes[0].value;
+        const savePokeNum = root.children[1].innerText;
+        const savePokeName = root.children[2].innerText;
+        
+        const card = document.createElement('div')
+        card.setAttribute('id',savePokeName);
+        card.setAttribute('No',PokeNum);
+        inventory.appendChild(card);
+        
+        const picture = document.createElement('img');
+        picture.setAttribute('src',savePokePicture);
+        card.appendChild(picture);
+        
+        const pokeNum = document.createElement('p');
+        pokeNum.innerText = savePokeNum;
+        card.appendChild(pokeNum);
+        
+        const pokeName = document.createElement('p');
+        pokeName.innerText = savePokeName;
+        card.appendChild(pokeName);
+      }
+    }
+    // -------------------------------------------
   </script>
 </body>
 </html>
