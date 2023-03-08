@@ -16,9 +16,6 @@
       font-family: 'NeoDunggeunmoPro-Regular';
     }
 
-    #root {
-      display: flex;
-    }
   </style>
 </head>
 <body>
@@ -30,10 +27,15 @@
     
     const root = document.getElementById('root');
     // root 식별
+    root.style.cssText="display : flex; justify-content : center; align-items : center; flex-direction : column;"
 
-    const creatDiv = document.createElement('div');
-    creatDiv.setAttribute("class", "items");
-    root.appendChild(creatDiv);
+
+    
+    for (let i = 0; i < 3; i++) {
+      const creatDiv = document.createElement('div');
+      creatDiv.setAttribute("class", "items");
+      root.appendChild(creatDiv);
+    }
 
     const createBtn = document.createElement('button');
     createBtn.setAttribute("class", "random_button");
@@ -44,7 +46,7 @@
 
     const ohDoctor = document.createElement('img');
     ohDoctor.setAttribute("src", "https://i.namu.wiki/i/z9PdYANrjSX71l0tk_Og7o_Qvhfkd9durUP0dSZqN19RePCZmBMwBCp_kHza1QZ9WowH404vPtau6RbbPFYNGA.png");
-    creatDiv.appendChild(ohDoctor);
+    root.children[0].appendChild(ohDoctor);
 
     const xhr = new XMLHttpRequest();
     // 문서가 서버에 데이터 요청 시작
@@ -71,7 +73,7 @@
 
       const h2 = document.createElement('img');
       h2.setAttribute("src", _PokePhoto.front_default);
-      creatDiv.appendChild(h2);
+      root.children[1].appendChild(h2);
       h2.style.display="none";
       // 포켓몬 초상화 출력.
 
@@ -94,7 +96,7 @@
 
       const h1 = document.createElement('h1');
       h1.textContent = _PokeKoreaName.name;
-      creatDiv.appendChild(h1);
+      root.children[2].appendChild(h1);
       h1.style.display="none";
       // 포켓몬 한글 이름 출력..
 
@@ -102,11 +104,18 @@
       createBtn.textContent="다시 뽑기";
       h1.style.display="inline-block";
       h2.style.display="inline-block";
-      if (createBtn.textContent === "다시 뽑기");
-    })
 
-      })
-    });
+    })
+    
+  })
+});
+
+createBtn.addEventListener("click", function() {
+  if (createBtn.textContent === "다시 뽑기") {
+      console.error("ㅋㅋ");
+
+    }
+})
 
 
 
