@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <div id="root"></div>
   <button type="button" onclick="randomPick()">click</button>
   <script>
     // 변수 xhr에 XHR 초기화 선언
     const xhr = new XMLHttpRequest();
-    
+
     // 모든 포켓몬 리스트 API URL
     const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
+
     
     // 모든 포켓몬 리스트 API URL에서 가져온 데이터를 저장하기 위한 변수 선언
     let PokeList;
@@ -26,8 +29,8 @@
     xhr.send();
 
     // 전송한 요청이 응답 되었을 때
-    xhr.addEventListener('load', function() {
-      
+    xhr.addEventListener('load', function () {
+
       // 모든 포켓몬 리스트를 파싱하여 변수에 저장
       PokeList = JSON.parse(xhr.response);
       return PokeList
@@ -41,53 +44,61 @@
 
       // 모든 포켓몬 리스트의 n번째 포켓몬으로 access
       const pokePick = PokeList.results[randomPick]
-      // console.log(pokePick.url);
+      console.log(pokePick.url);
 
       // 새로운 통신 객체 생성 / 변수에 저장
       const xhr = new XMLHttpRequest();
 
       // n번째 포켓몬의 url에 접속, 요청
       xhr.open('GET', pokePick.url);
-      xhr.send()
-      xhr.addEventListener('load', function() {
+      xhr.send();
+
+
+      xhr.addEventListener('load', function () {
         // n번째 포켓몬의 이름 데이터, 사진 데이터를 지정
-        const abc = JSON.parse(xhr.response)
+        const abc = JSON.parse(xhr.response);
+        const pokeName = abc.name;
         const frontPhoto = abc.sprites.front_default;
-        // console.log(abc);
-        
-        
+
+        const poname = abc.species.url;
+        console.dir(poname);
+
+        const testname = new XMLHttpRequest();
+
+        testname.open('GET', poname);
+        testname.send();
+        testname.addEventListener('load', function () {
+       
+          const par = JSON.parse(testname.response);
+          console.log(par.names[2].name);
+          let nick = par.names[2].name;
+          const nameNick = document.createElement('p');    
+          nameNick.innerText = nick;
+          document.body.appendChild(nameNick);
+    
+        })
+
+
+
         if (frontPhoto !== null) { // n번째 포켓몬의 사진이 있을 때
-          
-          // 포켓몬 이름 한국어로 접속하기 위한 url
-          koFetch = abc.species.url;
-          // console.log(koFetch);
-          
-          // 출력할 포켓몬 이름 변수 선언
-          let pokeName;
+          const test1 = document.createElement('img');
+     
+          test1.setAttribute('src', frontPhoto);
+          document.body.appendChild(test1);
+          const test2 = document.createElement('p');
+      
+          test2.innerText = pokeName;
+       
 
-          // 한국어 접속 url 설정, 요청
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', koFetch);
-          xhr.send()
-          xhr.addEventListener('load', function () {
-            const accessKo = JSON.parse(xhr.response);
-            // console.log(accessKo.names[2].name)
-
-            // 포켓몬 이미지 생성
-            const test1 = document.createElement('img');
-            test1.setAttribute('src', frontPhoto);
-            document.body.appendChild(test1);
-            pokeName = accessKo.names[2].name
-            // 포켓몬 이름 생성
-            const test2 = document.createElement('p');
-            test2.innerText = pokeName;
-            document.body.appendChild(test2);
-          })
+          document.body.appendChild(test2);
         } else { // n번째 포켓몬의 사진이 없을 때
           randomPick() // ★★★★★★★★★★ 재귀함수 (함수를 다시 처음부터 실행하라)
         }
+
+
       })
     }
   </script>
 </body>
+
 </html>
