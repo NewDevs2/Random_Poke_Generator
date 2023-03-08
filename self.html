@@ -21,6 +21,7 @@
 <body>
   <div id="root"></div>
   <script>
+    
     const root = document.getElementById('root');
     root.style.cssText="display : flex; justify-content : center; align-items : center; flex-direction : column;width : 100vw; height : 100vh;";
     const xhr = new XMLHttpRequest();
@@ -73,8 +74,9 @@
         xhr.send();
         xhr.addEventListener('load', function() {
           const pokemonName = JSON.parse(xhr.response);
+          console.log(pokemonName.names[2].name);
           const createPokemonName = document.createElement('h1');
-          createPokemonName.textContent = pokemonName.names[2].name;
+          createPokemonName.innerText = pokemonName.names[2].name;
           root.children[2].appendChild(createPokemonName);
         })
         createBtn.textContent = "다시 뽑기";
@@ -83,12 +85,12 @@
     
     createBtn.addEventListener("click", randomSelect);
 
-    createBtn.addEventListener("click", function() {
-      if (createBtn.textContent === "다시 뽑기") {
-        root.children[2].remove();
-        root.children[1].remove();
-      }
-    });
+    // createBtn.addEventListener("click", function() {
+    //   if (createBtn.textContent === "다시 뽑기") {
+    //     root.children[2].remove();
+    //     root.children[1].remove();
+    //   }
+    // });
   </script>
 </body>
 </html>
