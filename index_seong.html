@@ -33,7 +33,8 @@
     display: flex;
     flex-direction: column;
   }
-  #root > div:nth-child(1){
+
+  #root>div:nth-child(1) {
     border: 1px solid blue;
   }
 </style>
@@ -55,7 +56,7 @@
     xhr.open('GET', _URL);
     xhr.send();
 
-    xhr.addEventListener('load', function () {
+    function () {
       // xhr 전체가 로드가 되었을 때, 함수를 실행.
       // console.log(xhr.response);
       //xhr.responce 값이 콘솔에 찍힘 (그 악성코드)
