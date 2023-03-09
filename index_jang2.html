@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      background-color: blanchedalmond;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #root {
+      width: 300px;
+      height: 300px;
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #imgBox {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="imgBox"></div>
+    <div id="nameBox"></div>
+    <button onclick="printPoke()">포켓몬 뽑기</button>
+  </div>
+
+  <script>
+    // html 문서 내의 데이터 가져오기
+    const root = document.getElementById('root');
+    const imgBox = document.getElementById('imgBox');
+    const nameBox = document.getElementById('nameBox');
+    // 포켓몬 api를 가져오기 위한 데이터 요청
+    
+    // 요청을 만들기 위해 new 키워드를 사용, XMLHttpRequest생성자로 부터 새로운 request 인스턴스를 생성해야 함
+    const xhr = new XMLHttpRequest();
+    // 포케api의 모든 포켓몬 url
+    const allPokeUrl = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
+    
+    // 요청 방식(get)
+    xhr.open('GET',allPokeUrl);
+    // 서버가 json타입으로 데이터를 보내게 함 
+    
+    // 요청을 보냄
+    xhr.send();
+    // 전역변수로 사용하기 위해 선언
+    let allPokeInfo;
+    // 서버의 응답을 기다리고, 그것의 처리까지와 관련된 섹션 -> 웹페이지가 로드 됐을 때 기본적으로 모든 포켓몬의 정보를 불러와야 함
+    xhr.addEventListener('load', function() {
+      // 현재는 파싱은 안한 상태 그대로 -> json형식의 데이터만 담겨있음
+      allPokeInfo = JSON.parse(xhr.response)
+      // parse()메서드를 이용해 문자 -> 객체 형태로 바꿈
+      // allPokeInfo = JSON.parse(xhr.response);
+      // 모든 포켓몬 정보가 담긴 json파일이 js 객체형태로 나타난다
+      console.log(allPokeInfo)
+      // json 파일이 객체형태로 나타나서 개발자 도구로 읽고 result의 0번째 배열에 접근 -> 첫번째 포켓몬 접근 성공
+      console.log(allPokeInfo.results[0]);
+      // allPokeInfo는 지역변수 이므로 전역변수로 사용하기 위해 리턴해줌
+      return allPokeInfo;
+    })
+ console.log(allPokeInfo)
+    
+ function printPoke() {
+  // 위에서 parse하더라도 함수에서 별도의 사용을 선언하지 않으면 데이터가 휘발되는 듯
+    // const eachPokeInfo = allPokeInfo.results[0].url;
+  // 현재 얻은 api로는 여기까지만 가능 이 url안의 api 데이터를 얻기 위해 다시 접근 요청
+  const xhr2 = new XMLHttpRequest();
+  // url 접근 확인
+  // console.log(allPokeUrl);
+  const eachPokeInfoUrl = 'https://pokeapi.co/api/v2/pokemon/1/'
+  xhr2.open('GET',eachPokeInfoUrl)
+  xhr2.send();
+  xhr2.addEventListener('load', function() {
+    const eachPokeInfo = JSON.parse(xhr2.response);
+    // console.log(eachPokeInfo);
+    return eachPokeInfo;
+  })
+    // console.log(eachPokeInfo)
+    let div = document.createElement('div');
+    div.textContent = "하";
+    imgBox.appendChild(div);
+    
+ }
+      // 기능을 넣을 url이 담긴 json파일을 넣어주고 밑에서 함수 정의
+    //   sss(allPokeInfo)
+    //   console.log(sss)
+    // }
+    // // 포켓몬 이미지 출력 하기위한 함수 선언
+    // function sss() {
+
+    
+    // }
+
+
+    // // 포켓몬 개별 정보를 불러오기 위한 API 요청
+    // const eachPokeInfoURL = "https://pokeapi.co/api/v2/pokemon/1";
+    // // 데이터를 불러오자
+    // xml.open('get',eachPokeInfoURL);
+    //   // 확인해보니 send(요청)과 responsetype은 다시지정 안해줘도 됨, xml도 마찬가지
+    //   xml.onload = function() {
+    //     // 1번 포켓몬의 url을 통해 받은 json파일을 받음
+    //     let eachPokeInfo = xml.response;
+    //     console.log(eachPokeInfo)
+    //   }
+    
+   
+  </script>
+</body>
+</html>
