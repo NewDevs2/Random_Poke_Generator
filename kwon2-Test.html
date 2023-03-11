@@ -22,7 +22,7 @@
   <script>
     const root = document.getElementById('root');
     let testBox;
-
+    const output = document.getElementById('output');
 
     //다른 함수에도 변수를 가져와 사용 할 수 있게 지역 변수? 느낌으로 선언 하였다.
 
@@ -51,9 +51,12 @@
 
 
     //버튼이 잘 들어 왔는지 확인
-
+    let nameTag;
+    let mainimg;
 
     btnOut.addEventListener("click", function () {
+      let ad = 0;
+      root.replaceChildren();
       let randomPick = Math.floor(Math.random() * 1281);
       const poketListData = new XMLHttpRequest();
       const poketListDataUrl = testBox[randomPick].url;
@@ -63,6 +66,7 @@
       poketListData.send();
       let pokePick = {};
       let pokePick_sprites = [];
+
       poketListData.addEventListener('load', function () {
         pokePick = JSON.parse(poketListData.response);
         for (let key in pokePick.sprites) {
@@ -72,45 +76,68 @@
         console.log(pokePick.species.url);
         //랜덤 포켓몬의 정보 객체에 들어옴
         console.dir(pokePick.sprites);
-        console.log(pokePick_sprites);
+        console.log(pokePick.sprites.front_default);
+
+
+        mainimg = pokePick.sprites.front_default;
+
+
         for (let i = 0; i < pokePick_sprites.length - 2; i++) {
           const imgDiv = document.createElement("img");
           console.log(pokePick_sprites.length - 2);
 
           if (pokePick.sprites[pokePick_sprites[i]] !== null) {
             imgDiv.src = pokePick.sprites[pokePick_sprites[i]];
+
             root.appendChild(imgDiv);
 
           }
         }
-        pokePick_sprites.length = 0;
-        //배열 값을 초기화 해주었다 초기화를 안 해주면 클릭 했을 떄 마다 값이 계속 들어가서 배열의 크기가 계속 늘어난다.
 
         const poNameDate = new XMLHttpRequest();
         const poNameUrl = pokePick.species.url;
-        
-        poNameDate.open('GET',poNameUrl);
+
+        poNameDate.open('GET', poNameUrl);
         poNameDate.send();
-        poNameDate.addEventListener('load',function(){
+        poNameDate.addEventListener('load', function () {
           const poko = JSON.parse(poNameDate.response);
 
           console.log(poko.names[2].name);
           //한글 이름 확인
-          const nameTag = document.createElement("p");
+          nameTag = document.createElement("p");
           nameTag.textContent = poko.names[2].name;
           //이름 텍스트를 p태그에 담는다
           root.appendChild(nameTag);
           //루트 자식으로 p태그를 생성 한다. 22
-
-
         });
+
 
       });
 
+
+
+
     });
 
+    function test(test) {
+
+    }
+    //저장 버튼
+    btnIN.addEventListener('click', function () {
+      console.log(mainimg);
+      const imgtest = document.createElement('img');
+      imgtest.setAttribute("src", mainimg);
+      output.appendChild(imgtest);
+      output.appendChild(nameTag);
 
 
+    });
+
+    //리겟 버튼
+    btnReset.addEventListener('click', function () {
+      root.replaceChildren();
+      output.replaceChildren();
+    });
 
 
     // else if(pokePick.sprites[pokePick_sprites[i]] !== typeof(Object)){
