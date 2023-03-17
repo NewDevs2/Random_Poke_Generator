@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="./json/poke.js"></script>
 </head>
 
 <body>
@@ -13,6 +14,27 @@
 </body>
 <script>
   const root = document.getElementById('root');
+
+  // 포케 정보가 담긴 url
+  // fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
+  //   // .json 메서드가 json 응답을 js 객체 리터럴로 구문분석
+  //   .then(res => res.json())
+  // // 바로 데이터 접근 가능
+
+  // .then(data=> console.log(data))
+      // data.results[0].name 포켓몬 이름
+      // 이안에서 바로 접근은 안되나 봄
+      //  fetch('data.results[0].url')
+      // .then(res => res.json())
+      // .then(data => console.log(data))
+
+  
+
+
+  // 포켓몬 이미지를 곧바로 불러오려했으나 함수 범위때뭉네 실패
+  // fetch('data => console.log(data.results[0].url')
+  //   .then(res => res.json())
+  //   .then(ss => console.log(ss))
 
 </script>
 
