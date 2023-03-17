@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>노래 뭐 듣고 계세요?</title>
 </head>
+
 <body>
   <div id="root"></div>
-  <button type="button" onclick="randomPick()">click</button>
+  <button type="button" onclick="randomPick()">랜덤 포켓몬 출력</button>
+  <button type="button" onclick="save()">저장</button>
+  <button type="button" onclick="del()">삭제</button>
   <script>
     // 변수 xhr에 XHR 초기화 선언
     const xhr = new XMLHttpRequest();
-    
+
     // 모든 포켓몬 리스트 API URL
     const _URL = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
-    
+
     // 모든 포켓몬 리스트 API URL에서 가져온 데이터를 저장하기 위한 변수 선언
     let PokeList;
 
@@ -26,8 +30,8 @@
     xhr.send();
 
     // 전송한 요청이 응답 되었을 때
-    xhr.addEventListener('load', function() {
-      
+    xhr.addEventListener('load', function () {
+
       // 모든 포켓몬 리스트를 파싱하여 변수에 저장
       PokeList = JSON.parse(xhr.response);
       return PokeList
@@ -49,7 +53,7 @@
       // n번째 포켓몬의 url에 접속, 요청
       xhr.open('GET', pokePick.url);
       xhr.send()
-      xhr.addEventListener('load', function() {
+      xhr.addEventListener('load', function () {
         // n번째 포켓몬의 이름 데이터, 사진 데이터를 지정
         const abc = JSON.parse(xhr.response)
 
@@ -59,7 +63,7 @@
         const xhrName = new XMLHttpRequest();
         const nameUrl = abc.species['url'];
         console.log(nameUrl)
-        
+
         // 포켓몬 이름의 데이터(url)를 담기 위한 변수 선언
         let poketNameList
         // open메서드로 요청에 필요한 정보 설정
@@ -67,14 +71,14 @@
         // send() 메서드로 서버에 요청 보냄
         xhrName.send();
         // 해당 정보가 로드 되면 함수 실행
-        xhrName.addEventListener('load', function() {
-      
-      // 모든 포켓몬 이름의 리스트를 파싱하여 변수에 저장
-      poketNameList = JSON.parse(xhrName.response);
-      return poketNameList
-    });
-    console.log(poketNameList)
-      
+        xhrName.addEventListener('load', function () {
+
+          // 모든 포켓몬 이름의 리스트를 파싱하여 변수에 저장
+          poketNameList = JSON.parse(xhrName.response);
+          return poketNameList
+        });
+        console.log(poketNameList)
+
         // 여기까지가 랜덤으로 출력 되기 전 
 
 
@@ -84,10 +88,11 @@
         // // 이 방법은 안되는듯
         // const pokeNameUrl = abc.species['url']
         // console.log(pokeNameUrl)
-        
+
         const pokeName = abc.name;
+        // pokeName.setAttribute("id", "name");
         const frontPhoto = abc.sprites.front_default
-        
+
 
         if (frontPhoto !== null) { // n번째 포켓몬의 사진이 있을 때
           const test1 = document.createElement('img');
@@ -101,6 +106,10 @@
         }
       })
     }
+    // function save() {
+    //   let pokeChoice =
+    // }
   </script>
 </body>
+
 </html>
